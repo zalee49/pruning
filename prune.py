@@ -7,6 +7,8 @@ Reads DICOM headers only (stop_before_pixels=True) and excludes:
   - Non-TEE probes identified via TransducerData (0018,5010):
       excluded: linear probes (L-series), epiaortic x7-2
       kept:     x8-2t, x7-2t
+  - Clips with fewer than 32 source frames (NumberOfFrames < 32), too short for
+    the classifier.
 
 Usage:
     python prune.py --input <DicomDir> --output <PrunedDir> [--unknown-probe-action exclude|include]
@@ -30,6 +32,11 @@ _VOLUME_IMAGE_TYPE_KEYWORDS = {"3D", "VOLUME"}
 
 # RegionSpatialFormat codes >= 3 indicate volumetric region (3D, 3D+M-mode, etc.)
 _VOLUMETRIC_SPATIAL_FORMAT_THRESHOLD = 3
+
+# Minimum source frames a clip needs to be usable by the TEE view classifier.
+# = N_FRAMES * SAMPLE_PERIOD in the View Classifier (src/data.py). Kept in sync
+# manually with data.py and integration/stage_avis.py (MIN_FRAMES).
+_MIN_FRAMES = 32
 
 
 def _is_3d(ds: pydicom.Dataset) -> bool:
@@ -61,6 +68,21 @@ def _is_3d(ds: pydicom.Dataset) -> bool:
                 continue
 
     return False
+
+
+def _frame_count(ds: pydicom.Dataset) -> int:
+    """Source frame count from NumberOfFrames (0028,0008).
+
+    Absent tag means a single-frame image (1 frame). Unparseable values are
+    treated as 0 so the clip is excluded conservatively.
+    """
+    elem = ds.get((0x0028, 0x0008))
+    if elem is None:
+        return 1
+    try:
+        return int(elem.value)
+    except (TypeError, ValueError):
+        return 0
 
 
 def _extract_probe_string(tag_elem: pydicom.dataelem.DataElement) -> str:
@@ -175,6 +197,7 @@ def prune(input_dir: Path, output_dir: Path, unknown_action: str) -> int:
         "excluded_3d": 0,
         "excluded_probe": 0,
         "excluded_unknown": 0,
+        "excluded_frames": 0,
         "excluded_unreadable": 0,
     }
 
@@ -190,6 +213,7 @@ def prune(input_dir: Path, output_dir: Path, unknown_action: str) -> int:
                 "action": "exclude",
                 "probe": None,
                 "is_3d": False,
+                "n_frames": None,
                 "reason": "unreadable",
             })
             counts["excluded_unreadable"] += 1
@@ -197,13 +221,17 @@ def prune(input_dir: Path, output_dir: Path, unknown_action: str) -> int:
 
         probe = _probe_string(ds)
         is_3d = _is_3d(ds)
+        n_frames = _frame_count(ds)
 
         if is_3d:
             action, reason = "exclude", "3d_volume"
             counts["excluded_3d"] += 1
         else:
             action, reason = _classify_probe(ds, unknown_action)
-            if action == "keep":
+            if action == "keep" and n_frames < _MIN_FRAMES:
+                action, reason = "exclude", "too_few_frames"
+                counts["excluded_frames"] += 1
+            elif action == "keep":
                 counts["kept"] += 1
             elif reason == "unknown_probe":
                 counts["excluded_unknown"] += 1
@@ -215,6 +243,7 @@ def prune(input_dir: Path, output_dir: Path, unknown_action: str) -> int:
             "action": action,
             "probe": probe,
             "is_3d": is_3d,
+            "n_frames": n_frames,
             "reason": reason,
         })
 
@@ -233,6 +262,7 @@ def prune(input_dir: Path, output_dir: Path, unknown_action: str) -> int:
         "excluded_3d": counts["excluded_3d"],
         "excluded_probe": counts["excluded_probe"],
         "excluded_unknown": counts["excluded_unknown"],
+        "excluded_frames": counts["excluded_frames"],
         "excluded_unreadable": counts["excluded_unreadable"],
     }
 
@@ -243,7 +273,8 @@ def prune(input_dir: Path, output_dir: Path, unknown_action: str) -> int:
     print(
         f"Pruning complete: {counts['kept']}/{total} kept "
         f"({counts['excluded_3d']} 3D, {counts['excluded_probe']} probe, "
-        f"{counts['excluded_unknown']} unknown-probe excluded, "
+        f"{counts['excluded_unknown']} unknown-probe, "
+        f"{counts['excluded_frames']} too-few-frames excluded, "
         f"{counts['excluded_unreadable']} unreadable). "
         f"Manifest: {manifest_path}"
     )

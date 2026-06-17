@@ -1,0 +1,1349 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "stage0_exclusion_pipeline",
+        "label": "prune() ordered exclusion checks",
+        "nodes": [
+          "prune__prune",
+          "prune__is_3d",
+          "prune__classify_probe",
+          "prune__min_frames"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "AGENTS.md"
+      },
+      {
+        "id": "cross_repo_min_frames_contract",
+        "label": "32-frame cross-repo contract",
+        "nodes": [
+          "prune__min_frames",
+          "data",
+          "stage_avis"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "AGENTS.md"
+      },
+      {
+        "id": "three_repo_pipeline_flow",
+        "label": "Pruning to de-id to classifier flow",
+        "nodes": [
+          "pruning",
+          "dicom_deidentification",
+          "view_classifier"
+        ],
+        "relation": "form",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": "AGENTS.md"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "export_excluded_avis.py",
+      "file_type": "code",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "export_excluded_avis",
+      "community": 0,
+      "norm_label": "export_excluded_avis.py"
+    },
+    {
+      "label": "_write_avi()",
+      "file_type": "code",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "export_excluded_avis_write_avi",
+      "community": 0,
+      "norm_label": "_write_avi()"
+    },
+    {
+      "label": "Dataset",
+      "file_type": "code",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "export_excluded_avis_py_dataset",
+      "community": 0,
+      "norm_label": "dataset"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "export_excluded_avis_py_path",
+      "community": 0,
+      "norm_label": "path"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L81",
+      "_origin": "ast",
+      "id": "export_excluded_avis_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Convert all probe-excluded and unknown-probe DICOM clips from a pruning manifest",
+      "file_type": "rationale",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "export_excluded_avis_rationale_1",
+      "community": 0,
+      "norm_label": "convert all probe-excluded and unknown-probe dicom clips from a pruning manifest"
+    },
+    {
+      "label": "Decode ds.pixel_array and write an MJPG AVI, handling raw Philips DICOMs correct",
+      "file_type": "rationale",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "export_excluded_avis_rationale_36",
+      "community": 0,
+      "norm_label": "decode ds.pixel_array and write an mjpg avi, handling raw philips dicoms correct"
+    },
+    {
+      "label": "prune.py",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "prune",
+      "community": 5,
+      "norm_label": "prune.py"
+    },
+    {
+      "label": "_is_3d()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "prune_is_3d",
+      "community": 8,
+      "norm_label": "_is_3d()"
+    },
+    {
+      "label": "Dataset",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L42",
+      "_origin": "ast",
+      "id": "prune_py_dataset",
+      "community": 2,
+      "norm_label": "dataset"
+    },
+    {
+      "label": "_frame_count()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L73",
+      "_origin": "ast",
+      "id": "prune_frame_count",
+      "community": 5,
+      "norm_label": "_frame_count()"
+    },
+    {
+      "label": "_extract_probe_string()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "prune_extract_probe_string",
+      "community": 2,
+      "norm_label": "_extract_probe_string()"
+    },
+    {
+      "label": "DataElement",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L88",
+      "_origin": "ast",
+      "id": "dataelement",
+      "community": 2,
+      "norm_label": "dataelement"
+    },
+    {
+      "label": "_classify_probe()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L109",
+      "_origin": "ast",
+      "id": "prune_classify_probe",
+      "community": 2,
+      "norm_label": "_classify_probe()"
+    },
+    {
+      "label": "_probe_string()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L144",
+      "_origin": "ast",
+      "id": "prune_probe_string",
+      "community": 2,
+      "norm_label": "_probe_string()"
+    },
+    {
+      "label": "_find_dicoms()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L152",
+      "_origin": "ast",
+      "id": "prune_find_dicoms",
+      "community": 6,
+      "norm_label": "_find_dicoms()"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L152",
+      "_origin": "ast",
+      "id": "prune_py_path",
+      "community": 6,
+      "norm_label": "path"
+    },
+    {
+      "label": "_link_or_copy()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L165",
+      "_origin": "ast",
+      "id": "prune_link_or_copy",
+      "community": 6,
+      "norm_label": "_link_or_copy()"
+    },
+    {
+      "label": "prune()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L176",
+      "_origin": "ast",
+      "id": "prune_prune",
+      "community": 7,
+      "norm_label": "prune()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "prune.py",
+      "source_location": "L285",
+      "_origin": "ast",
+      "id": "prune_main",
+      "community": 7,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Prune a directory of DICOM files before de-identification.  Reads DICOM headers",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "prune_rationale_1",
+      "community": 5,
+      "norm_label": "prune a directory of dicom files before de-identification.  reads dicom headers"
+    },
+    {
+      "label": "Return True if any DICOM signal indicates a 3D/volumetric dataset.",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "prune_rationale_43",
+      "community": 8,
+      "norm_label": "return true if any dicom signal indicates a 3d/volumetric dataset."
+    },
+    {
+      "label": "Source frame count from NumberOfFrames (0028,0008).      Absent tag means a sing",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "prune_rationale_74",
+      "community": 5,
+      "norm_label": "source frame count from numberofframes (0028,0008).      absent tag means a sing"
+    },
+    {
+      "label": "Extract a plain probe model string from a TransducerData DataElement.      Trans",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L89",
+      "_origin": "ast",
+      "id": "prune_rationale_89",
+      "community": 2,
+      "norm_label": "extract a plain probe model string from a transducerdata dataelement.      trans"
+    },
+    {
+      "label": "Return (action, reason) for the probe in this DICOM.      action  : \"keep\" | \"ex",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L110",
+      "_origin": "ast",
+      "id": "prune_rationale_110",
+      "community": 2,
+      "norm_label": "return (action, reason) for the probe in this dicom.      action  : \"keep\" | \"ex"
+    },
+    {
+      "label": "Walk input_dir recursively; return all files (assumed DICOM).",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L153",
+      "_origin": "ast",
+      "id": "prune_rationale_153",
+      "community": 6,
+      "norm_label": "walk input_dir recursively; return all files (assumed dicom)."
+    },
+    {
+      "label": "Hardlink src -> dst; fall back to copy if they're on different drives.",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L166",
+      "_origin": "ast",
+      "id": "prune_rationale_166",
+      "community": 6,
+      "norm_label": "hardlink src -> dst; fall back to copy if they're on different drives."
+    },
+    {
+      "label": "Scan input_dir, copy/link approved files to output_dir, write manifest.      Ret",
+      "file_type": "rationale",
+      "source_file": "prune.py",
+      "source_location": "L177",
+      "_origin": "ast",
+      "id": "prune_rationale_177",
+      "community": 7,
+      "norm_label": "scan input_dir, copy/link approved files to output_dir, write manifest.      ret"
+    },
+    {
+      "label": "Pruning (Stage 0 pre-filter)",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "pruning",
+      "community": 4,
+      "norm_label": "pruning (stage 0 pre-filter)"
+    },
+    {
+      "label": "prune() exclusion pipeline",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "prune__prune",
+      "community": 1,
+      "norm_label": "prune() exclusion pipeline"
+    },
+    {
+      "label": "_is_3d() (3D/volumetric check)",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "prune__is_3d",
+      "community": 3,
+      "norm_label": "_is_3d() (3d/volumetric check)"
+    },
+    {
+      "label": "_classify_probe() (probe classifier)",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "prune__classify_probe",
+      "community": 1,
+      "norm_label": "_classify_probe() (probe classifier)"
+    },
+    {
+      "label": "_MIN_FRAMES = 32 (cross-repo contract)",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "prune__min_frames",
+      "community": 1,
+      "norm_label": "_min_frames = 32 (cross-repo contract)"
+    },
+    {
+      "label": "_write_avi() (AVI writer)",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "export_excluded_avis__write_avi",
+      "community": 0,
+      "norm_label": "_write_avi() (avi writer)"
+    },
+    {
+      "label": "pruning_manifest.json",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "pruning_manifest",
+      "community": 0,
+      "norm_label": "pruning_manifest.json"
+    },
+    {
+      "label": "Three-repo pipeline flow",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "three_repo_flow",
+      "community": 4,
+      "norm_label": "three-repo pipeline flow"
+    },
+    {
+      "label": "DICOM DEIDENTIFICATION (de-id stage)",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "dicom_deidentification",
+      "community": 4,
+      "norm_label": "dicom deidentification (de-id stage)"
+    },
+    {
+      "label": "View Classifier (downstream classifier)",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "view_classifier",
+      "community": 4,
+      "norm_label": "view classifier (downstream classifier)"
+    },
+    {
+      "label": "dicom-deid conda env (Python 3.11)",
+      "file_type": "concept",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "dicom_deid_env",
+      "community": 4,
+      "norm_label": "dicom-deid conda env (python 3.11)"
+    },
+    {
+      "label": "Ordered exclusion rules (first match wins)",
+      "file_type": "rationale",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "exclusion_rules",
+      "community": 1,
+      "norm_label": "ordered exclusion rules (first match wins)"
+    },
+    {
+      "label": "Probe check ordering invariant",
+      "file_type": "rationale",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "probe_ordering_invariant",
+      "community": 1,
+      "norm_label": "probe check ordering invariant"
+    },
+    {
+      "label": "Color-space double-conversion guard",
+      "file_type": "rationale",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "colorspace_double_conversion_guard",
+      "community": 0,
+      "norm_label": "color-space double-conversion guard"
+    },
+    {
+      "label": "Header-first, fail-conservatively convention",
+      "file_type": "rationale",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "fail_conservatively_convention",
+      "community": 5,
+      "norm_label": "header-first, fail-conservatively convention"
+    },
+    {
+      "label": "3D Render Filter Plan (tabled)",
+      "file_type": "document",
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": "2026-06-14",
+      "author": null,
+      "contributor": null,
+      "id": "3d_render_filter_plan",
+      "community": 3,
+      "norm_label": "3d render filter plan (tabled)"
+    },
+    {
+      "label": "3D renders exported as 2D US Multi-frame (known gap)",
+      "file_type": "concept",
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": "2026-06-14",
+      "author": null,
+      "contributor": null,
+      "id": "3d_render_filter_plan_3d_as_2d_gap",
+      "community": 3,
+      "norm_label": "3d renders exported as 2d us multi-frame (known gap)"
+    },
+    {
+      "label": "DERIVED + no-ultrasound-regions discriminator",
+      "file_type": "rationale",
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": "2026-06-14",
+      "author": null,
+      "contributor": null,
+      "id": "3d_render_filter_plan_derived_no_regions_rule",
+      "community": 3,
+      "norm_label": "derived + no-ultrasound-regions discriminator"
+    },
+    {
+      "label": "SequenceOfUltrasoundRegions (0018,6011)",
+      "file_type": "concept",
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": "2026-06-14",
+      "author": null,
+      "contributor": null,
+      "id": "3d_render_filter_plan_sequence_of_ultrasound_regions",
+      "community": 3,
+      "norm_label": "sequenceofultrasoundregions (0018,6011)"
+    },
+    {
+      "label": "integration/stage_avis.py (decode-based safety net)",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "stage_avis",
+      "community": 1,
+      "norm_label": "integration/stage_avis.py (decode-based safety net)"
+    },
+    {
+      "label": "src/data.py (N_FRAMES * SAMPLE_PERIOD)",
+      "file_type": "code",
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "data",
+      "community": 1,
+      "norm_label": "src/data.py (n_frames * sample_period)"
+    }
+  ],
+  "links": [
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "export_excluded_avis",
+      "target": "export_excluded_avis__write_avi"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "export_excluded_avis",
+      "target": "export_excluded_avis_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "export_excluded_avis",
+      "target": "export_excluded_avis_write_avi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "export_excluded_avis",
+      "target": "pruning_manifest"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "export_excluded_avis_rationale_1",
+      "target": "export_excluded_avis",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "pruning",
+      "target": "export_excluded_avis"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "export_excluded_avis_main",
+      "target": "export_excluded_avis_write_avi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "export_excluded_avis_rationale_36",
+      "target": "export_excluded_avis_write_avi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "export_excluded_avis_write_avi",
+      "target": "export_excluded_avis_py_dataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "export_excluded_avis_write_avi",
+      "target": "export_excluded_avis_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "export_excluded_avis.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "export_excluded_avis_main",
+      "target": "export_excluded_avis_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "3d_render_filter_plan_derived_no_regions_rule",
+      "target": "prune"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "fail_conservatively_convention",
+      "target": "prune"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune__prune"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_classify_probe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_extract_probe_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_find_dicoms",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_frame_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_is_3d",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_link_or_copy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L285",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L144",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_probe_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "prune",
+      "target": "prune_prune",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune",
+      "target": "pruning_manifest"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "prune_rationale_1",
+      "target": "prune",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "pruning",
+      "target": "prune"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "prune_is_3d",
+      "target": "prune_py_dataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "source": "prune_prune",
+      "target": "prune_is_3d",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "prune_rationale_43",
+      "target": "prune_is_3d",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "prune_classify_probe",
+      "target": "prune_py_dataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "prune_frame_count",
+      "target": "prune_py_dataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L144",
+      "weight": 1.0,
+      "source": "prune_probe_string",
+      "target": "prune_py_dataset",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "source": "prune_prune",
+      "target": "prune_frame_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "prune_rationale_74",
+      "target": "prune_frame_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "prune_classify_probe",
+      "target": "prune_extract_probe_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "prune_extract_probe_string",
+      "target": "dataelement",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "prune_probe_string",
+      "target": "prune_extract_probe_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "prune_rationale_89",
+      "target": "prune_extract_probe_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L230",
+      "weight": 1.0,
+      "source": "prune_prune",
+      "target": "prune_classify_probe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "prune_rationale_110",
+      "target": "prune_classify_probe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "prune_prune",
+      "target": "prune_probe_string",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L152",
+      "weight": 1.0,
+      "source": "prune_find_dicoms",
+      "target": "prune_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L187",
+      "weight": 1.0,
+      "source": "prune_prune",
+      "target": "prune_find_dicoms",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "prune_rationale_153",
+      "target": "prune_find_dicoms",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "source": "prune_link_or_copy",
+      "target": "prune_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "prune_prune",
+      "target": "prune_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L251",
+      "weight": 1.0,
+      "source": "prune_prune",
+      "target": "prune_link_or_copy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "prune_rationale_166",
+      "target": "prune_link_or_copy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L301",
+      "weight": 1.0,
+      "source": "prune_main",
+      "target": "prune_prune",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "prune.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "prune_rationale_177",
+      "target": "prune_prune",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "pruning",
+      "target": "dicom_deid_env"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "pruning",
+      "target": "three_repo_flow"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "exclusion_rules",
+      "target": "prune__prune"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune__prune",
+      "target": "prune__classify_probe"
+    },
+    {
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune__prune",
+      "target": "prune__is_3d"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune__prune",
+      "target": "prune__min_frames"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "3d_render_filter_plan",
+      "target": "prune__is_3d"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "3d_render_filter_plan_3d_as_2d_gap",
+      "target": "prune__is_3d"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune__is_3d",
+      "target": "3d_render_filter_plan_sequence_of_ultrasound_regions"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "probe_ordering_invariant",
+      "target": "prune__classify_probe"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune__min_frames",
+      "target": "data"
+    },
+    {
+      "relation": "shares_data_with",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "prune__min_frames",
+      "target": "stage_avis"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "colorspace_double_conversion_guard",
+      "target": "export_excluded_avis__write_avi"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "three_repo_flow",
+      "target": "dicom_deidentification"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "three_repo_flow",
+      "target": "view_classifier"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "3d_render_filter_plan",
+      "target": "3d_render_filter_plan_3d_as_2d_gap"
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "3d_render_filter_plan_derived_no_regions_rule",
+      "target": "3d_render_filter_plan_3d_as_2d_gap"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "3D_RENDER_FILTER_PLAN.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "3d_render_filter_plan_derived_no_regions_rule",
+      "target": "3d_render_filter_plan_sequence_of_ultrasound_regions"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "stage0_exclusion_pipeline",
+      "label": "prune() ordered exclusion checks",
+      "nodes": [
+        "prune__prune",
+        "prune__is_3d",
+        "prune__classify_probe",
+        "prune__min_frames"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md"
+    },
+    {
+      "id": "cross_repo_min_frames_contract",
+      "label": "32-frame cross-repo contract",
+      "nodes": [
+        "prune__min_frames",
+        "data",
+        "stage_avis"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md"
+    },
+    {
+      "id": "three_repo_pipeline_flow",
+      "label": "Pruning to de-id to classifier flow",
+      "nodes": [
+        "pruning",
+        "dicom_deidentification",
+        "view_classifier"
+      ],
+      "relation": "form",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "AGENTS.md"
+    }
+  ],
+  "built_at_commit": "7639a573ef22079227776299feb3e0456e891844"
+}
