@@ -21,11 +21,15 @@ Two standalone CLI scripts, no package, no shared module:
   DICOM with `stop_before_pixels=True`, and hard-links (or copies, across
   drives) approved files into `--output` preserving relative paths, plus a
   `pruning_manifest.json` recording the action/reason for **every** file.
+  Approved clips containing two side-by-side imaging panels (x-plane/biplane,
+  color-compare) are split into two single-panel DICOMs instead of being
+  linked whole (`--no-split` disables this).
 - **[export_excluded_avis.py](export_excluded_avis.py)** — a QA/debug tool.
   Reads a `pruning_manifest.json` and converts the *probe-excluded* clips
   (`linear_probe`, `epiaortic_probe`, `unknown_probe`) to AVI so you can
-  eyeball whether the probe rules were right. Output AVIs are **raw pixels with
-  no PHI redaction** — inspection only.
+  eyeball whether the probe rules were right. With `--pruned-output`, also
+  renders both halves of every dual-pane `split` record. Output AVIs are **raw
+  pixels with no PHI redaction** — inspection only.
 
 ## Environment and commands
 
@@ -39,11 +43,13 @@ conda run --no-capture-output -n dicom-deid python prune.py \
   --input  <RawDicomDir> \
   --output <PrunedDir> \
   [--unknown-probe-action exclude|include]   # default: exclude
+  [--no-split]                               # default: split dual-pane clips
 
 conda run --no-capture-output -n dicom-deid python export_excluded_avis.py \
   --manifest <PrunedDir>/pruning_manifest.json \
   --input    <RawDicomDir> \
-  --output   <InspectionAviDir>
+  --output   <InspectionAviDir> \
+  [--pruned-output <PrunedDir>]              # also render split halves
 ```
 
 `prune.py` exit codes are meaningful to the pipeline orchestrator:
@@ -63,6 +69,16 @@ manifest `reason`:
    TransducerData absent/unrecognised → `unknown_probe`, kept or excluded per
    `--unknown-probe-action`.
 4. **Too few frames** (`reason: too_few_frames`) — `NumberOfFrames < _MIN_FRAMES`.
+
+Clips that pass all of the above are then checked for dual-pane content
+(`_detect_dual_pane`, `reason: dual_pane`, `action: split`) — two horizontally
+disjoint imaging panels (2D, RegionDataType Tissue/Color Flow, each ≥25% of
+frame width/height) in `SequenceOfUltrasoundRegions`. A single-pane color clip's
+overlapping Tissue + Color-Flow-ROI regions are grouped into one panel (by
+x-overlap) so it is **not** split. Both halves are written as new uncompressed
+DICOMs (`<stem>__L`/`<stem>__R`), each with region coordinates rewritten
+relative to the crop and a fresh SOPInstanceUID. Decode/write failure falls
+back to keeping the file whole (`reason: split_failed`).
 
 ### Things that are easy to get wrong
 
@@ -97,5 +113,5 @@ manifest `reason`:
   continue.
 - The manifest is the source of truth for what happened and is consumed by
   `export_excluded_avis.py`; keep its `records` shape (`relative_path`, `action`,
-  `probe`, `is_3d`, `n_frames`, `reason`) and `summary` counters in sync if you
-  add an exclusion category.
+  `probe`, `is_3d`, `n_frames`, `reason`, plus `outputs` on `split` records) and
+  `summary` counters in sync if you add an exclusion category.

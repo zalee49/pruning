@@ -1,7 +1,9 @@
 # Plan: filter out 3D / rendered-volume clips that slip past pruning
 
-**Status:** Tabled (investigation complete, not yet implemented).
-**Date:** 2026-06-14
+**Status:** Implemented 2026-07-07 as `_is_rendered_3d()` in `prune.py`
+(reason `3d_rendered`, counter `excluded_3d_rendered`, disable with
+`--no-render-3d-filter`). Applies to all manufacturers, not gated to Philips.
+**Date:** 2026-06-14 (investigation), 2026-07-07 (implementation)
 
 ## Problem
 
@@ -56,18 +58,19 @@ an absent/empty `SequenceOfUltrasoundRegions` (0018,6011).
 
 ## Plan when we pick this back up
 
-1. **Validate before committing.** The rule was checked against one patient
-   only. Sweep all 20 suspects here (and a couple of other patients), extract a
-   frame from each, and confirm none are legitimate 2D clips before we start
-   dropping on this rule.
-2. **Implement in `prune.py`.** Add the `DERIVED + no-ultrasound-regions`
-   signal as a new exclusion. Give it its own manifest reason / counter
-   (e.g. `excluded_3d_rendered`, or fold into `excluded_3d`) so it stays
-   auditable in `pruning_manifest.json`.
-3. **One-off cleanup of already-staged data.** The fix only affects future
-   runs. `Z:\DICOM Research\prunedavi_flat` already contains these renders
-   (~20 per patient in the sample), so a separate cleanup pass over the
-   existing staged AVIs will be needed.
+1. **Validate before committing.** ⚠️ Still outstanding — the rule was only
+   checked against one patient's 192 clips before implementation. Sweep the
+   ~20 suspects here (and a couple of other patients), extract a frame from
+   each, and confirm none are legitimate 2D clips (M-mode is the likeliest
+   false-positive source) before trusting this rule on a production run.
+2. **Implement in `prune.py`.** ✅ Done — `_is_rendered_3d()` adds the
+   `DERIVED + no-ultrasound-regions` signal as its own exclusion, with reason
+   `3d_rendered` and counter `excluded_3d_rendered` in `pruning_manifest.json`.
+   Disable via `--no-render-3d-filter`.
+3. **One-off cleanup of already-staged data.** ⚠️ Still outstanding — the fix
+   only affects future runs. `Z:\DICOM Research\prunedavi_flat` already
+   contains these renders (~20 per patient in the sample), so a separate
+   cleanup pass over the existing staged AVIs will be needed.
 
 ## Open questions / risks
 

@@ -1,6 +1,8 @@
 """
 Convert all probe-excluded and unknown-probe DICOM clips from a pruning manifest
-to AVI files for visual inspection.
+to AVI files for visual inspection. Also supports rendering dual-pane split
+outputs (action == "split") so both halves can be eyeballed for correct
+cropping and color.
 
 PHI WARNING: output AVIs are raw pixels with no banner redaction — for
 inspection only, not for distribution.
@@ -9,6 +11,7 @@ Usage:
     python export_excluded_avis.py --manifest <pruning_manifest.json>
                                    --input    <original DICOM root>
                                    --output   <folder to write AVIs>
+                                   [--pruned-output <PrunedDir> ]  # to also render split halves
 """
 
 import argparse
@@ -83,38 +86,49 @@ def main() -> None:
     p.add_argument("--manifest", required=True, type=Path, help="pruning_manifest.json produced by prune.py")
     p.add_argument("--input",    required=True, type=Path, help="original DICOM root (same --input used for prune.py)")
     p.add_argument("--output",   required=True, type=Path, help="directory to write AVIs (organised by reason)")
+    p.add_argument(
+        "--pruned-output", type=Path, default=None,
+        help="Pruned output directory (same --output used for prune.py); if given, "
+             "also renders both halves of every dual-pane split record for QA",
+    )
     args = p.parse_args()
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     records = [r for r in manifest["records"] if r["action"] == "exclude" and r["reason"] in INSPECT_REASONS]
 
-    if not records:
-        print("No probe-excluded or unknown-probe files found in manifest.")
+    jobs = [(rec, args.input / Path(rec["relative_path"]), rec["reason"], Path(rec["relative_path"]).name) for rec in records]
+
+    if args.pruned_output is not None:
+        for rec in manifest["records"]:
+            if rec["action"] != "split":
+                continue
+            for out_rel in rec["outputs"]:
+                jobs.append((rec, args.pruned_output / Path(out_rel), "split", Path(out_rel).name))
+
+    if not jobs:
+        print("No probe-excluded, unknown-probe, or split files found in manifest.")
         sys.exit(0)
 
-    print(f"Converting {len(records)} excluded clips to AVI...")
+    print(f"Converting {len(jobs)} clips to AVI...")
     ok = skipped = failed = 0
 
-    for rec in records:
-        src = args.input / Path(rec["relative_path"])
-        reason = rec["reason"]
-        probe  = (rec["probe"] or "no_transducer_data").replace("/", "_").replace("\\", "_")
-        stem   = Path(rec["relative_path"]).name
-        dst    = args.output / reason / f"{stem}__{probe}.avi"
+    for rec, src, reason, stem in jobs:
+        probe = (rec["probe"] or "no_transducer_data").replace("/", "_").replace("\\", "_")
+        dst   = args.output / reason / f"{stem}__{probe}.avi"
         dst.parent.mkdir(parents=True, exist_ok=True)
 
         if not src.exists():
-            print(f"  SKIP (not found): {rec['relative_path']}")
+            print(f"  SKIP (not found): {src}")
             skipped += 1
             continue
 
         try:
             ds = pydicom.dcmread(str(src))
             n_frames = _write_avi(ds, dst)
-            print(f"  OK  [{reason}] {rec['relative_path']}  ({n_frames} frames)  probe={rec['probe']!r}")
+            print(f"  OK  [{reason}] {src.name}  ({n_frames} frames)  probe={rec['probe']!r}")
             ok += 1
         except Exception as exc:
-            print(f"  ERR [{reason}] {rec['relative_path']}: {exc}")
+            print(f"  ERR [{reason}] {src.name}: {exc}")
             failed += 1
 
     print(f"\nDone: {ok} converted, {skipped} skipped (missing), {failed} failed.")

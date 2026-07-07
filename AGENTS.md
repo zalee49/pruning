@@ -27,21 +27,27 @@ export_excluded_avis.py     # QA tool: render probe-excluded clips to AVI for vi
 
 ## Environment setup
 
-No build, no test suite, no linter. The code uses 3.10+ type syntax
-(`tuple[str, str]`, `str | None`), so run it under a Python ≥3.10 env that has
-`pydicom` (and `opencv-python` + `numpy` for the exporter). In this workspace
-that is the sibling **`dicom-deid`** conda env (Python 3.11):
+No build, no linter. The code uses 3.10+ type syntax (`tuple[str, str]`,
+`str | None`), so run it under a Python ≥3.10 env that has `pydicom` (and
+`opencv-python` + `numpy` for the exporter). In this workspace that is the
+sibling **`dicom-deid`** conda env (Python 3.11), which also has `pytest` for
+`tests/test_prune.py`:
 
 ```
+conda run --no-capture-output -n dicom-deid pytest
+
 conda run --no-capture-output -n dicom-deid python prune.py \
   --input  <RawDicomDir> \
   --output <PrunedDir> \
   [--unknown-probe-action exclude|include]   # default: exclude
+  [--no-split]                               # default: split dual-pane clips
+  [--no-render-3d-filter]                    # default: filter rendered-3D-as-2D clips
 
 conda run --no-capture-output -n dicom-deid python export_excluded_avis.py \
   --manifest <PrunedDir>/pruning_manifest.json \
   --input    <RawDicomDir> \
-  --output   <InspectionAviDir>
+  --output   <InspectionAviDir> \
+  [--pruned-output <PrunedDir>]              # also render split halves
 ```
 
 `prune.py` exit codes are meaningful to the pipeline orchestrator:
@@ -52,11 +58,16 @@ conda run --no-capture-output -n dicom-deid python export_excluded_avis.py \
 - **`prune.py`** — walks `--input` recursively, reads each DICOM with
   `stop_before_pixels=True`, and hard-links (or copies, across drives) approved
   files into `--output` preserving relative paths, plus a `pruning_manifest.json`
-  recording the action/reason for **every** file.
+  recording the action/reason for **every** file. Approved clips containing two
+  side-by-side imaging panels (x-plane/biplane, color-compare) are split into
+  two single-panel DICOMs instead of being linked whole (`--no-split` disables
+  this).
 - **`export_excluded_avis.py`** — reads a `pruning_manifest.json` and converts
   the *probe-excluded* clips (`linear_probe`, `epiaortic_probe`, `unknown_probe`)
-  to AVI so a human can confirm the probe rules were right. Output AVIs are
-  **raw pixels with no PHI redaction** — inspection only, not for distribution.
+  to AVI so a human can confirm the probe rules were right. With
+  `--pruned-output`, also renders both halves of every dual-pane `split`
+  record. Output AVIs are **raw pixels with no PHI redaction** — inspection
+  only, not for distribution.
 
 ## Exclusion rules (the core logic)
 
@@ -67,11 +78,26 @@ manifest `reason`:
 2. **3D / volumetric** (`_is_3d`, `reason: 3d_volume`) — any of: SOPClassUID ==
    Enhanced US Volume Storage `1.2.840.10008.5.1.4.1.1.6.2`; `3D`/`VOLUME` in
    ImageType; or RegionSpatialFormat ≥ 3 in SequenceOfUltrasoundRegions.
-3. **Probe** (`_classify_probe`) — keeps TEE probes **x8-2t / x7-2t**; excludes
+3. **Rendered 3D disguised as 2D** (`_is_rendered_3d`, `reason: 3d_rendered`) —
+   SOPClassUID == ordinary US Multi-frame `1.2.840.10008.5.1.4.1.1.3.1`,
+   ImageType contains `DERIVED`, and SequenceOfUltrasoundRegions is
+   absent/empty. Disable with `--no-render-3d-filter`. See
+   [3D_RENDER_FILTER_PLAN.md](3D_RENDER_FILTER_PLAN.md).
+4. **Probe** (`_classify_probe`) — keeps TEE probes **x8-2t / x7-2t**; excludes
    linear `L\d` probes (`linear_probe`) and epiaortic **x7-2** (`epiaortic_probe`).
    TransducerData absent/unrecognised → `unknown_probe`, kept or excluded per
    `--unknown-probe-action`.
-4. **Too few frames** (`reason: too_few_frames`) — `NumberOfFrames < _MIN_FRAMES`.
+5. **Too few frames** (`reason: too_few_frames`) — `NumberOfFrames < _MIN_FRAMES`.
+
+Clips that pass all of the above are then checked for dual-pane content
+(`_detect_dual_pane`, `reason: dual_pane`, `action: split`) — two horizontally
+disjoint imaging panels (2D, RegionDataType Tissue/Color Flow, each ≥25% of
+frame width/height) in `SequenceOfUltrasoundRegions`. A single-pane color clip's
+overlapping Tissue + Color-Flow-ROI regions are grouped into one panel (by
+x-overlap) so it is **not** split. Both halves are written as new uncompressed
+DICOMs (`<stem>__L`/`<stem>__R`), each with region coordinates rewritten
+relative to the crop and a fresh SOPInstanceUID. Decode/write failure falls
+back to keeping the file whole (`reason: split_failed`).
 
 ## Invariants that are easy to break
 
@@ -85,13 +111,15 @@ manifest `reason`:
   epiaortic *exclude* check; the regex `x7-2(?!t)` depends on that. Probe model
   strings are normalised lowercase with `_`→`-` because Philips writes both
   `X8_2t` and `X8-2t`.
-- **Known gap — 3D renders exported as 2D.** Philips exports 3D Zoom / volume
-  renders as ordinary US Multi-frame images (`...1.1.3.1`, ImageType
-  `DERIVED\PRIMARY\CARDIOLOGY`, no SequenceOfUltrasoundRegions), so `_is_3d`
-  does **not** catch them and they pass. Investigation, the proposed
-  `DERIVED + no-ultrasound-regions` discriminator, and the validation/cleanup
-  plan live in [3D_RENDER_FILTER_PLAN.md](3D_RENDER_FILTER_PLAN.md). Tabled, not
-  yet implemented.
+- **3D renders exported as 2D — now caught by `_is_rendered_3d`.** Philips
+  exports 3D Zoom / volume renders as ordinary US Multi-frame images
+  (`...1.1.3.1`, ImageType `DERIVED\PRIMARY\CARDIOLOGY`, no
+  SequenceOfUltrasoundRegions); `_is_3d` alone does not catch them, so
+  `_is_rendered_3d` (`reason: 3d_rendered`) was added to close the gap.
+  Discriminator was only validated against one patient's clips before
+  implementation — see the "still outstanding" items in
+  [3D_RENDER_FILTER_PLAN.md](3D_RENDER_FILTER_PLAN.md) (broader validation
+  sweep, cleanup of already-staged data).
 - **Color-space double-conversion (exporter).** `export_excluded_avis.py` skips
   `convert_color_space` for JPEG transfer syntaxes (`...4.50`/`...4.51`) because
   pydicom/Pillow already decodes those to RGB even though
@@ -106,5 +134,5 @@ manifest `reason`:
   continue.
 - The manifest is the source of truth for what happened and is consumed by
   `export_excluded_avis.py`; keep its `records` shape (`relative_path`, `action`,
-  `probe`, `is_3d`, `n_frames`, `reason`) and `summary` counters in sync if you
-  add an exclusion category.
+  `probe`, `is_3d`, `n_frames`, `reason`, plus `outputs` on `split` records) and
+  `summary` counters in sync if you add an exclusion category.
